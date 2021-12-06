@@ -7,6 +7,9 @@ bin
 *.class
 mvnw
 mvnw*
+.idea
+.mvn
+*.iml
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
