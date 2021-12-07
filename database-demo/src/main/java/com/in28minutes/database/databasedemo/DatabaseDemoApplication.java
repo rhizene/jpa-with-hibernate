@@ -35,10 +35,12 @@ public class DatabaseDemoApplication implements CommandLineRunner {
 
 		logger.info("Delete Person id#{}: {}", personId, dao.deleteById(personId));
 
-		Person newPerson = new Person(10005, "Pietra", "Russia", new Date());
-		logger.info("Insert Person {}: {}", newPerson, dao.insert(newPerson));
+		Person newPerson = new Person( "Pietra", "Russia", new Date());
+		dao.insert(newPerson);
+		newPerson = dao.findByNameAndLocation(newPerson.getName(), newPerson.getLocation());
+		logger.info("Insert Person: {}", newPerson);
 
-		logger.info("Renamed {}, {}", newPerson.getId(), dao.updateNameById(newPerson.getId(), "Boskonovich"));
+		logger.info("Renamed Person with id#{}, {}", newPerson.getId(), dao.updateNameById(newPerson.getId(), "Boskonovich"));
 		newPerson.setLocation("Kamuning");
 		logger.info("Updated Person again to {}, {}", newPerson, dao.update(newPerson));
 	}

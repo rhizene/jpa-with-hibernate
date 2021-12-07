@@ -45,6 +45,10 @@ public class PersonJdbcDao {
         return jdbcTemplate.query("SELECT * FROM Person WHERE name = ?", createPersonRowMapper(), new Object[]{name});
     }
 
+    public Person findByNameAndLocation(String name, String location) {
+        return jdbcTemplate.queryForObject("SELECT * FROM Person WHERE name = ? and location = ?", new PersonRowMapper(), new Object[]{name, location});
+    }
+
     public int deleteById(int id) {
         return jdbcTemplate.update("DELETE FROM Person WHERE id = ?", id);
     }
