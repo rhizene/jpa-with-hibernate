@@ -1,7 +1,7 @@
 package com.in28minutes.database.databasedemo;
 
 import com.in28minutes.database.databasedemo.entity.Person;
-import com.in28minutes.database.databasedemo.jdbc.PersonJdbcDao;
+import com.in28minutes.database.databasedemo.jpa.PersonJpaRepository;
 import java.util.Collection;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DatabaseDemoApplication implements CommandLineRunner {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
-	private PersonJdbcDao dao;
+	private PersonJpaRepository personJpaRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DatabaseDemoApplication.class, args);
@@ -23,25 +23,24 @@ public class DatabaseDemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		final Collection<Person> personById = dao.findAll();
+		final Collection<Person> personById = personJpaRepository.findAll();
 		logger.info("People({}): {}", personById.size(), personById);
 
 		final int personId = 10002;
-		logger.info("Person id#{}: {}", personId, dao.findById(personId));
+		logger.info("Person id#{}: {}", personId, personJpaRepository.findById(personId));
 
 		final String personName = "Joe Mama";
-		final Collection<Person> personByName = dao.findByName(personName);
+		final Collection<Person> personByName = personJpaRepository.findByName(personName);
 		logger.info("Named '{}'({}): {}", personName, personByName.size(), personByName);
 
-		logger.info("Delete Person id#{}: {}", personId, dao.deleteById(personId));
+		logger.info("Delete Person id#{}: {}", personId, personJpaRepository.deleteById(personId));
 
 		Person newPerson = new Person( "Pietra", "Russia", new Date());
-		dao.insert(newPerson);
-		newPerson = dao.findByNameAndLocation(newPerson.getName(), newPerson.getLocation());
-		logger.info("Insert Person: {}", newPerson);
+		logger.info("Insert Person: {}", personJpaRepository.save(newPerson));
 
-		logger.info("Renamed Person with id#{}, {}", newPerson.getId(), dao.updateNameById(newPerson.getId(), "Boskonovich"));
+		newPerson.setName("Boskonovich");
+		logger.info("Renamed Person with id#{}, {}", newPerson.getId(), personJpaRepository.save(newPerson));
 		newPerson.setLocation("Kamuning");
-		logger.info("Updated Person again to {}, {}", newPerson, dao.update(newPerson));
+		logger.info("Updated Person again to {}, {}", newPerson, personJpaRepository.save(newPerson));
 	}
 }

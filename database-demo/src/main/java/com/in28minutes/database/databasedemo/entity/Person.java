@@ -4,8 +4,14 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "find_all_person",query = "SELECT p FROM Person p"),
+        @NamedQuery(name = "find_by_name",query = "SELECT p FROM Person p WHERE p.name = :name")
+})
 public class Person {
 
     @Id
